@@ -8,33 +8,34 @@
     <title>Switchboard</title>
     <style>
         :root {
-            --bg-color: #0d0d0d;
-            --panel-bg: #000000;
-            --panel-bg2: #050505;
-            --border-color: #222222;
-            --border-bright: #444444;
-            --border-dim: #252525;
-            --bg-dim: #111111;
-            --text-primary: #e0e0e0;
-            --text-secondary: #777777;
+            --bg-color: var(--vscode-editor-background, #0f1117);
+            --panel-bg: var(--vscode-sideBar-background, #161b22);
+            --panel-bg2: rgba(255, 255, 255, 0.02);
+            --border-color: rgba(255, 255, 255, 0.08); /* Border trắng mờ nhẹ */
+            --border-bright: rgba(255, 255, 255, 0.15); /* Sleek lines */
+            --border-dim: rgba(255, 255, 255, 0.03);
+            --bg-dim: rgba(255, 255, 255, 0.01);
+            --text-primary: var(--vscode-editor-foreground, #e2e8f0);
+            --text-secondary: var(--vscode-descriptionForeground, #94a3b8);
 
-            --accent-cyan: #3ddbd9;
-            --accent-teal: #3ddbd9;
-            --accent-teal-dim: color-mix(in srgb, var(--accent-teal) 40%, transparent);
-            --glow-teal: 0 0 10px color-mix(in srgb, var(--accent-teal) 50%, transparent);
-            --accent-green: #4ec9b0;
-            --accent-green-dim: #2d7a6a;
-            --accent-red: #f85149;
-            --accent-orange: #d18616;
+            --accent-cyan: var(--vscode-textLink-foreground, #3ddbd9);
+            --accent-teal: var(--vscode-textLink-foreground, #3ddbd9);
+            --accent-teal-dim: color-mix(in srgb, var(--accent-teal) 15%, transparent);
+            --accent-green: var(--vscode-testing-iconPassed, #4ec9b0);
+            --accent-green-dim: color-mix(in srgb, var(--accent-green) 15%, transparent);
+            --accent-red: var(--vscode-errorForeground, #f85149);
+            --accent-orange: var(--vscode-charts-orange, #d18616);
             --accent-purple: #ab7df8;
 
-            --glow-green: 0 0 10px rgba(78, 201, 176, 0.6), 0 0 20px rgba(78, 201, 176, 0.25);
-            --glow-red: 0 0 10px rgba(248, 81, 73, 0.6), 0 0 20px rgba(248, 81, 73, 0.25);
-            --glow-green-btn: 0 0 6px rgba(78, 201, 176, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-            --glow-cyan: 0 0 8px rgba(55, 148, 255, 0.3);
+            /* Removed messy glows */
+            --glow-teal: none;
+            --glow-green: none;
+            --glow-red: none;
+            --glow-green-btn: none;
+            --glow-cyan: none;
 
-            --font-family: var(--vscode-font-family, 'Segoe UI', 'Roboto', sans-serif);
-            --font-mono: var(--vscode-editor-font-family, 'Consolas', 'Courier New', monospace);
+            --font-family: var(--vscode-font-family, 'Inter', 'Segoe UI', 'Roboto', sans-serif);
+            --font-mono: var(--vscode-editor-font-family, 'Fira Code', 'Consolas', 'Courier New', monospace);
         }
 
         * {

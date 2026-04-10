@@ -3029,6 +3029,7 @@ export class TaskViewerProvider implements vscode.WebviewViewProvider {
                 // Wait a tiny bit for the webview components to mount
                 setTimeout(async () => {
                     this._view?.webview.postMessage({ type: 'loading', value: true });
+                    await this._recheckNeedsSetup();
                     this._sendInitialState();
                     await Promise.all([
                         this._refreshSessionStatus(),
@@ -3062,6 +3063,7 @@ export class TaskViewerProvider implements vscode.WebviewViewProvider {
                 switch (data.type) {
                     case 'ready':
                         this._view?.webview.postMessage({ type: 'loading', value: true });
+                        await this._recheckNeedsSetup();
                         this._sendInitialState();
                         await Promise.all([
                             this._refreshSessionStatus(),
@@ -9338,6 +9340,35 @@ Create this file exactly as specified, then continue your work.`);
             console.error('[TaskViewerProvider] initializeProtocols failed:', e);
             this._view?.webview.postMessage({ type: 'onboardingProgress', step: 'error', message: String(e) });
         }
+    }
+
+    /**
+     * Re-evaluates needsSetup by checking if switchboard files exist on disk independently.
+     * Prevents cases where extension thinks setup is needed but it was already completed (e.g. CLI setup or partial UI onboarding).
+     */
+    private async _recheckNeedsSetup(): Promise<void> {
+        const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+        if (!workspaceRoot) {
+            this._needsSetup = false;
+            return;
+        }
+
+        try {
+            const agentDir = vscode.Uri.file(path.join(workspaceRoot, '.agent'));
+            const workflowsDir = vscode.Uri.file(path.join(workspaceRoot, '.agent', 'workflows'));
+            const switchboardDir = vscode.Uri.file(path.join(workspaceRoot, '.switchboard'));
+            const mcpPath = vscode.Uri.file(path.join(workspaceRoot, '.switchboard', 'MCP', 'mcp-server.js'));
+
+            const workflowsExist = await vscode.workspace.fs.stat(workflowsDir).then(() => true, () => false);
+            const agentExists = await vscode.workspace.fs.stat(agentDir).then(() => true, () => false);
+            const runtimeExists = await vscode.workspace.fs.stat(switchboardDir).then(() => true, () => false);
+            const hasProtocol = workflowsExist || (agentExists && runtimeExists);
+            const hasMcp = await vscode.workspace.fs.stat(mcpPath).then(() => true, () => false);
+
+            if (hasProtocol && hasMcp) {
+                this._needsSetup = false;
+            }
+        } catch { }
     }
 
     /**

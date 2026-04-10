@@ -7,18 +7,18 @@
     <title>Plan Ticket</title>
     <style>
         :root {
-            --bg: #0f1117;
-            --panel: #161b22;
-            --panel-alt: #0b0d12;
-            --border: #2d333b;
-            --text: #d1d7e0;
-            --muted: #8b949e;
-            --accent: #3ddbd9;
-            --danger: #f85149;
-            --success: #3fb950;
-            --shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
-            --font-family: var(--vscode-font-family, 'Segoe UI', sans-serif);
-            --mono: var(--vscode-editor-font-family, 'Consolas', monospace);
+            --bg: var(--vscode-editor-background, #0f1117);
+            --panel: var(--vscode-sideBar-background, #161b22);
+            --panel-alt: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 255, 255, 0.08); /* Minimal soft white border */
+            --text: var(--vscode-editor-foreground, #e2e8f0);
+            --muted: var(--vscode-descriptionForeground, #94a3b8);
+            --accent: var(--vscode-textLink-foreground, #3ddbd9);
+            --danger: var(--vscode-errorForeground, #f85149);
+            --success: var(--vscode-testing-iconPassed, #3fb950);
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --font-family: var(--vscode-font-family, 'Inter', 'Segoe UI', sans-serif);
+            --mono: var(--vscode-editor-font-family, 'Fira Code', 'Consolas', monospace);
         }
 
         * {
