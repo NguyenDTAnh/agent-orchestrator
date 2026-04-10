@@ -3035,7 +3035,7 @@ export class TaskViewerProvider implements vscode.WebviewViewProvider {
                         this._refreshSessionStatus(),
                         this._refreshTerminalStatuses(),
                         this._syncFilesAndRefreshRunSheets(),
-                        this.housekeepStaleTerminals(),
+                        this.housekeepStaleTerminals(),``
                         this._refreshJulesStatus(),
                         this._postRecentActivity(50),
                         this._sweepOrphanedReviews()
