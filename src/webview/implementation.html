@@ -1083,52 +1083,17 @@
             </div>
             <div class="flex gap-2" style="margin-top: 6px;">
                 <button id="btn-complete-plan" class="secondary-btn w-full">COMPLETE</button>
-                <button id="btn-copy-plan-link" class="secondary-btn w-full" title="Copy Markdown link for active plan"
-                    aria-label="Copy plan link">COPY</button>
+                <!-- <button id="btn-copy-plan-link" class="secondary-btn w-full" title="Copy Markdown link for active plan"
+                    aria-label="Copy plan link">COPY</button> -->
                 <button id="btn-create-plan" class="secondary-btn w-full">CREATE</button>
             </div>
             <div style="margin-top: 6px;">
                 <button id="btn-open-kanban" class="secondary-btn is-teal w-full">OPEN AUTOBAN</button>
             </div>
         </div>
-
-        <!-- PINNED DASHBOARD: AGENT LIST (includes Auto-agent) -->
-        <div id="panel-agents" class="tab-panel">
-            <div class="sub-tab-bar">
-                <button class="sub-tab-btn is-active" data-tab="agents">Agents</button>
-                <button class="sub-tab-btn" data-tab="webai">Airlock</button>
-                <button class="sub-tab-btn" data-tab="autoban">Autoban</button>
-            </div>
-            <div id="agent-list-standard" class="agent-list">
-                <div style="text-align: center; padding: 20px; color: var(--text-secondary);">
-                    Initializing...
-                </div>
-            </div>
-            <div id="agent-list-autoban" class="agent-list hidden"></div>
-            <div id="agent-list-webai" class="agent-list hidden"></div>
-        </div>
-
-        <!-- LIVE ACTIVITY FEED -->
-        <div class="system-section" style="border-bottom: 1px solid var(--border-color);">
-            <div class="panel-toggle" id="live-feed-toggle" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                <div class="flex" style="align-items: center; gap: 10px;">
-                    <div class="section-label" style="margin:0">LIVE FEED</div>
-                    <button id="btn-clear-activity" class="mini-action-btn" style="font-size: 8px; padding: 2px 6px; letter-spacing: 0.5px; opacity: 0.7;">CLEAR</button>
-                </div>
-                <span class="chevron" id="live-feed-chevron">▶</span>
-            </div>
-            <div id="panel-activity" class="panel-fields" aria-hidden="true" data-accordion="true">
-                <div id="activity-list" class="activity-list" style="padding: 4px 0;">
-                    <div
-                        style="text-align: center; padding: 12px; color: var(--text-secondary); font-family: var(--font-mono);">
-                        No activity loaded yet.
-                    </div>
-                </div>
-                <button id="btn-activity-load-more" class="secondary-btn w-full activity-load-more hidden" style="margin: 0 0 4px 0;">LOAD
-                    MORE</button>
-            </div>
-        </div>
-
+...
+... skip some lines ...
+...
         <!-- TERMINAL OPERATIONS -->
         <div class="system-section">
             <div class="panel-toggle" id="terminal-operations-toggle">
@@ -1138,8 +1103,8 @@
             <div class="panel-fields open" id="terminal-operations-fields" data-accordion="true">
                 <button id="createAgentGrid" class="secondary-btn is-teal w-full">OPEN AGENT TERMINALS</button>
                 <button id="btn-deregister-all" class="secondary-btn error w-full">RESET ALL AGENTS</button>
-                <button id="btn-easter-egg" class="secondary-btn w-full" style="margin-top: 6px;">Access main
-                    program</button>
+                <!-- <button id="btn-easter-egg" class="secondary-btn w-full" style="margin-top: 6px;">Access main
+                    program</button> -->
                 <div
                     style="font-size: 10px; color: var(--text-secondary); margin: 8px 0 4px; font-family: var(--font-mono); letter-spacing: 1px;">
                     AGENT VISIBILITY &amp; CLI COMMANDS</div>
