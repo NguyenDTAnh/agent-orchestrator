@@ -1490,10 +1490,18 @@
         }
 
         function renderColumns() {
+            // Filter out disabled agent columns
+            const visibleDefs = columnDefinitions.filter(def => {
+                if (def.role && lastVisibleAgents[def.role] === false) {
+                    return false;
+                }
+                return true;
+            });
+
             // When collapsed, replace the three coder columns with a single synthetic entry
-            let renderDefs = columnDefinitions;
+            let renderDefs = visibleDefs;
             if (collapseCodersEnabled) {
-                const coderDefs = columnDefinitions.filter(d => d.kind === 'coded');
+                const coderDefs = visibleDefs.filter(d => d.kind === 'coded' || ['lead', 'coder', 'intern'].includes(d.role));
                 if (coderDefs.length > 0) {
                     const syntheticCol = {
                         id: 'CODED_AUTO',
@@ -1504,8 +1512,8 @@
                         autobanEnabled: true,
                         dragDropMode: 'cli'
                     };
-                    renderDefs = columnDefinitions
-                        .filter(d => d.kind !== 'coded')
+                    renderDefs = visibleDefs
+                        .filter(d => !(d.kind === 'coded' || ['lead', 'coder', 'intern'].includes(d.role)))
                         .concat([syntheticCol])
                         .sort((a, b) => (a.order || 0) - (b.order || 0));
                 }
@@ -2511,6 +2519,8 @@
                         lastVisibleAgents = { ...lastVisibleAgents, ...msg.agents };
                         updateAllColumnAgents();
                         updateJulesButtonVisibility();
+                        renderColumns();
+                        renderBoard(currentCards);
                     }
                     break;
                 case 'copyPlanLinkResult':
