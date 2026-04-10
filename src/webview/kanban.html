@@ -53,14 +53,17 @@
 
         .kanban-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            padding: 16px 24px 14px;
-            border-bottom: 1px solid var(--border-color);
-            background: color-mix(in srgb, var(--panel-bg) 82%, transparent);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+            align-items: center;
+            padding: 2px 16px;
+            background: rgba(30,30,35,0.4);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            min-height: 28px;
+        }
+        .kanban-header:empty, .kanban-header:not(:has(*)) {
+            display: none;
         }
 
         .kanban-title {
@@ -294,26 +297,47 @@
         }
 
         .kanban-card {
-            background: color-mix(in srgb, var(--panel-bg3) 60%, rgba(255, 255, 255, 0.02));
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--border-color);
-            border-left: 1px solid var(--border-strong);
-            border-radius: 12px;
-            padding: 12px 14px;
-            margin-bottom: 10px;
+            border-left: 2px solid var(--border-strong);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
             cursor: grab;
-            transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
             position: relative;
+            overflow: hidden;
         }
 
+        .kanban-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at top left, rgba(255,255,255,0.03), transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Complexity Glows */
+        .kanban-card.very-high { border-left-color: var(--accent-red); box-shadow: 0 4px 15px rgba(255, 123, 114, 0.04); }
+        .kanban-card.high { border-left-color: var(--accent-red); box-shadow: 0 4px 15px rgba(255, 123, 114, 0.03); }
+        .kanban-card.medium { border-left-color: var(--accent-orange); box-shadow: 0 4px 15px rgba(210, 153, 34, 0.03); }
+        .kanban-card.low { border-left-color: #98c379; box-shadow: 0 4px 15px rgba(152, 195, 121, 0.03); }
+        .kanban-card.very-low { border-left-color: var(--accent-teal); box-shadow: 0 4px 15px rgba(122, 162, 247, 0.03); }
+
         .kanban-card:hover {
-            border-color: var(--border-bright);
-            border-left-color: color-mix(in srgb, var(--accent-teal) 24%, var(--border-strong));
-            box-shadow: var(--shadow-card);
-            transform: translateY(-1px);
+            border-color: rgba(255, 255, 255, 0.22);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            transform: translateY(-2px);
             z-index: 50;
         }
+
+        .kanban-card.very-high:hover { box-shadow: 0 8px 24px rgba(255, 123, 114, 0.12); }
+        .kanban-card.high:hover { box-shadow: 0 8px 24px rgba(255, 123, 114, 0.1); }
+        .kanban-card.medium:hover { box-shadow: 0 8px 24px rgba(210, 153, 34, 0.1); }
+        .kanban-card.low:hover { box-shadow: 0 8px 24px rgba(152, 195, 121, 0.1); }
+        .kanban-card.very-low:hover { box-shadow: 0 8px 24px rgba(122, 162, 247, 0.12); }
 
         .kanban-card.dragging {
             opacity: 0.45;
@@ -412,10 +436,10 @@
             background: rgba(255, 255, 255, 0.12); /* Subtle glass, not neon */
         }
 
-        .card-btn.recover:hover {
-            border-color: rgba(255, 255, 255, 0.3);
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.12);
+        .card-btn.delete:hover {
+            border-color: rgba(255, 68, 68, 0.4);
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.12);
         }
 
         .card-btn.icon-btn {
@@ -553,10 +577,15 @@
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
             font-family: var(--font-mono);
-            font-size: 10px;
+            font-size: 9px;
             letter-spacing: 0.8px;
             text-transform: uppercase;
-            padding: 5px 10px;
+            padding: 4px;
+            width: 26px; /* Match btn-add-plan */
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
             border-radius: 10px;
             transition: all 0.15s ease;
@@ -603,13 +632,13 @@
         }
 
         .column-icon-btn:hover img {
-            filter: brightness(0) invert(1) opacity(0.85);
+            filter: none;
         }
 
         /* Flash animation for icon button clicks */
         @keyframes iconFlash {
-            0% { filter: brightness(0) invert(1) opacity(1); }
-            100% { filter: brightness(0) invert(1) opacity(0.5); }
+            0% { filter: brightness(1.5); }
+            100% { filter: none; }
         }
         .column-icon-btn.flash img {
             animation: iconFlash 0.35s ease-out forwards;
@@ -1075,14 +1104,13 @@
 </head>
 
     <body>
-    <div class="kanban-header">
-        <div class="kanban-title" id="kanban-title">AUTOBAN - Drag plan cards to trigger CLI Agent actions | Copy prompts to send to IDE chat agents</div>
+    <div class="kanban-header" id="kanban-header-container">
         <div class="header-controls">
-            <select id="workspace-select" class="workspace-select" data-tooltip="Select workspace"></select>
+            <select id="workspace-select" class="workspace-select" data-tooltip="Select workspace" style="display: none;"></select>
         </div>
     </div>
     <div class="controls-strip">
-        <button class="strip-btn" id="btn-autoban" data-tooltip="Start or stop the automation engine">▶ START AUTOMATION</button>
+        <button class="strip-btn" id="btn-autoban" data-tooltip="Start or stop the automation engine" style="display: none !important;">▶ START AUTOMATION</button>
         <div class="autoban-timers-inline" id="autoban-timers-inline"></div>
         <span class="controls-spacer"></span>
         <span class="triggers-off-badge" id="triggers-off-badge" hidden>⚠ TRIGGERS OFF</span>
@@ -1107,7 +1135,7 @@
             <option value="ide-cli">IDE Lead + CLI Coder</option>
             <option value="ide-ide">IDE Lead + IDE Coder</option>
         </select>
-        <button class="strip-btn" id="btn-refresh-strip" data-tooltip="Sync board with latest backend state">↻ SYNC BOARD</button>
+        <button class="strip-btn" id="btn-refresh-strip" data-tooltip="Sync board with latest backend state" style="display: none !important;">↻ SYNC BOARD</button>
         <button class="strip-btn" id="btn-routing-map" data-tooltip="Configure complexity-based routing rules">⇢ ROUTING MAP</button>
         <button class="strip-btn" id="btn-collapse-coders" data-tooltip="Toggle collapsed coder columns view">⇥ COLLAPSE CODERS</button>
     </div>
@@ -1509,7 +1537,9 @@
                     : '';
 
                 const backlogToggleBtn = isCreated
-                    ? `<button class="backlog-toggle-btn${showingBacklog ? ' is-active' : ''}" id="btn-toggle-backlog" style="${draggedSessionId !== null ? 'pointer-events:none;opacity:0.5;' : ''}" data-tooltip="${showingBacklog ? 'Switch to New view' : 'Switch to Backlog view'}">${showingBacklog ? 'VIEW NEW' : 'VIEW BACKLOG'}</button>`
+                    ? `<button class="backlog-toggle-btn${showingBacklog ? ' is-active' : ''}" id="btn-toggle-backlog" style="${draggedSessionId !== null ? 'pointer-events:none;opacity:0.5;' : ''}" data-tooltip="${showingBacklog ? 'Switch to New view' : 'Switch to Backlog view'}">
+                           ${showingBacklog ? '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h14M1 7h14M1 11h14"/></svg>' : '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5l5 2.5L13 5M3 8l5 2.5L13 8M3 11l5 2.5L13 11"/></svg>'}
+                       </button>`
                     : '';
                 const rightSide = isCreated
                     ? `<div style="display: flex; align-items: center; gap: 8px; line-height: 1;">
@@ -1523,9 +1553,7 @@
                             ${modeToggle}
                             <span class="column-count" id="count-${escapeAttr(def.id)}">0</span>
                        </div>`;
-                const subline = hasAgent
-                    ? `<div class="column-agent" id="agent-${escapeAttr(def.id)}"></div>`
-                    : `<div class="column-subline-spacer" aria-hidden="true"></div>`;
+                const subline = `<div class="column-subline-spacer" aria-hidden="true"></div>`;
 
                 // Column button area (with buttons for all columns except last/completed, empty strip for last)
                 let buttonArea = '';
@@ -1599,10 +1627,12 @@
                 }
 
                 const columnDisplayLabel = (isCreated && showingBacklog) ? 'BACKLOG' : def.label;
+                const cleanLabel = (s) => (s || '').split('\n')[0].replace(/OPENCODE_THINKING=[^ ]+/g, '').replace(/GEMINI CLI/g, '').replace(/CLI/g, '').trim();
+
                 return `<div class="kanban-column" data-column="${escapeAttr(def.id)}">
                     <div class="column-header">
                         <div style="display:flex; flex-direction:column;">
-                            <span class="column-name">${escapeHtml(columnDisplayLabel)}</span>
+                            <span class="column-name">${escapeHtml(cleanLabel(columnDisplayLabel))}</span>
                             ${subline}
                         </div>
                         ${rightSide}
@@ -1787,32 +1817,8 @@
         }
 
         function updateAllColumnAgents() {
-            if (!lastAgentNames) return;
-
-            columns.forEach(col => {
-                const el = document.getElementById('agent-' + col);
-                if (el) {
-                    const role = columnToRole(col);
-                    const name = lastAgentNames[role];
-                    if (role && (lastVisibleAgents[role] === false || name === 'No agent assigned')) {
-                        el.textContent = 'No agent assigned';
-                        el.style.color = 'var(--vscode-editorWarning-foreground, #cca700)';
-                        el.style.fontStyle = 'italic';
-                    } else {
-                        el.textContent = name || '';
-                        el.style.color = '';
-                        el.style.fontStyle = '';
-                    }
-                }
-            });
-
-            // Update synthetic CODED_AUTO agent subline when collapsed
-            const autoRouteEl = document.getElementById('agent-CODED_AUTO');
-            if (autoRouteEl) {
-                autoRouteEl.textContent = 'Dynamic routing';
-                autoRouteEl.style.color = '';
-                autoRouteEl.style.fontStyle = 'italic';
-            }
+            // Refinement: Agent names removed from headers for cleaner premium look.
+            return;
         }
 
         function updateJulesButtonVisibility() {
@@ -1930,62 +1936,57 @@
                 }
             });
 
-            document.querySelectorAll('.card-btn.review').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    postKanbanMessage({ type: 'reviewPlan', sessionId: btn.dataset.session, workspaceRoot: btn.dataset.workspaceRoot });
-                });
-            });
+            // Consolidated event delegation for all card-level buttons
+            const boardContainer = document.getElementById('kanban-board');
+            if (boardContainer && !boardContainer.dataset.listenersAttached) {
+                boardContainer.dataset.listenersAttached = 'true';
+                boardContainer.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.card-btn');
+                    if (!btn) return;
 
-            document.querySelectorAll('.card-btn.complete').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const cardEl = e.target.closest('.kanban-card');
-                    if (cardEl) {
-                        // Optimistic UI: Animate out before sending to backend
-                        cardEl.classList.add('card-completing');
-                        setTimeout(() => {
-                            postKanbanMessage({ type: 'completePlan', sessionId: btn.dataset.session, workspaceRoot: btn.dataset.workspaceRoot });
-                        }, 350); // Slightly less than 400ms to ensure smooth handoff to the backend redraw
-                    } else {
-                        // Fallback if DOM traversal fails
-                        postKanbanMessage({ type: 'completePlan', sessionId: btn.dataset.session, workspaceRoot: btn.dataset.workspaceRoot });
+                    const sessionId = btn.dataset.session;
+                    const workspaceRoot = btn.dataset.workspaceRoot || currentWorkspaceRoot;
+
+                    if (btn.classList.contains('delete')) {
+                        e.stopPropagation();
+                        // Defer to extension host for confirmation modal due to sandbox restrictions
+                        postKanbanMessage({ type: 'deleteCard', sessionId, workspaceRoot });
+                    } else if (btn.classList.contains('complete')) {
+                        e.stopPropagation();
+                        const cardEl = btn.closest('.kanban-card');
+                        if (cardEl) {
+                            cardEl.classList.add('card-completing');
+                            setTimeout(() => {
+                                postKanbanMessage({ type: 'completePlan', sessionId, workspaceRoot });
+                            }, 350);
+                        } else {
+                            postKanbanMessage({ type: 'completePlan', sessionId, workspaceRoot });
+                        }
+                    } else if (btn.classList.contains('copy')) {
+                        e.stopPropagation();
+                        btn.disabled = true;
+                        const column = btn.dataset.column || btn.closest('.kanban-column')?.dataset?.column;
+                        postKanbanMessage({ type: 'copyPlanLink', sessionId, column, workspaceRoot });
+                    } else if (btn.classList.contains('recover')) {
+                        e.stopPropagation();
+                        btn.disabled = true;
+                        btn.textContent = 'Recovering…';
+                        postKanbanMessage({ type: 'recoverSelected', sessionIds: [sessionId] });
+                    } else if (btn.classList.contains('pair-program-btn')) {
+                        e.stopPropagation();
+                        postKanbanMessage({ type: 'pairProgramCard', sessionId });
+                    } else if (btn.classList.contains('send-to-backlog-btn')) {
+                        e.stopPropagation();
+                        postKanbanMessage({ type: 'sendToBacklog', sessionId, workspaceRoot });
+                    } else if (btn.classList.contains('send-to-new-btn')) {
+                        e.stopPropagation();
+                        postKanbanMessage({ type: 'sendToNew', sessionId, workspaceRoot });
+                    } else if (btn.classList.contains('review')) {
+                        e.stopPropagation();
+                        postKanbanMessage({ type: 'reviewPlan', sessionId, workspaceRoot });
                     }
                 });
-            });
-
-            document.querySelectorAll('.card-btn.copy').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    btn.disabled = true;
-                    const column = btn.dataset.column || btn.closest('.kanban-column')?.dataset?.column;
-                    postKanbanMessage({ type: 'copyPlanLink', sessionId: btn.dataset.session, column, workspaceRoot: btn.dataset.workspaceRoot });
-                });
-            });
-
-            document.querySelectorAll('.card-btn.recover').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    btn.disabled = true;
-                    btn.textContent = 'Recovering…';
-                    postKanbanMessage({ type: 'recoverSelected', sessionIds: [btn.dataset.session] });
-                });
-            });
-
-            document.querySelectorAll('.pair-program-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const sessionId = btn.dataset.session;
-                    postKanbanMessage({ type: 'pairProgramCard', sessionId });
-                });
-            });
-
-            document.querySelectorAll('.send-to-backlog-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    postKanbanMessage({ type: 'sendToBacklog', sessionId: btn.dataset.session, workspaceRoot: btn.dataset.workspaceRoot });
-                });
-            });
-
-            document.querySelectorAll('.send-to-new-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    postKanbanMessage({ type: 'sendToNew', sessionId: btn.dataset.session, workspaceRoot: btn.dataset.workspaceRoot });
-                });
-            });
+            }
 
             requestAnimationFrame(() => restoreBoardViewState(viewState));
         }
@@ -2047,7 +2048,7 @@
                        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-6"/></svg>
                    </button>`;
             return `
-                <div class="kanban-card${completedClass}" draggable="true" data-session="${card.sessionId}" data-workspace-root="${escapeAttr(card.workspaceRoot)}">
+                <div class="kanban-card${completedClass} ${complexityClass}" draggable="true" data-session="${card.sessionId}" data-workspace-root="${escapeAttr(card.workspaceRoot)}">
                     <div class="card-topic">${escapeHtml(shortTopic)}</div>
                     <div class="card-meta">Complexity: <span class="complexity-indicator ${complexityClass}">${category}</span> · ${timeAgo}</div>
                     <div class="card-actions" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
@@ -2057,6 +2058,9 @@
                             ${backlogActionBtn}
                         </div>
                         <div style="display: flex; gap: 4px;">
+                            <button class="card-btn icon-btn delete" data-session="${card.sessionId}" data-workspace-root="${escapeAttr(card.workspaceRoot)}" data-tooltip="Permanently delete plan">
+                                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V3a1 1 0 011-1h4a1 1 0 011 1v1m2 0v9a2 2 0 01-2 2H4a2 2 0 01-2-2V4h12zM6 7v6M10 7v6"/></svg>
+                            </button>
                             <button class="card-btn icon-btn review" data-session="${card.sessionId}" data-workspace-root="${escapeAttr(card.workspaceRoot)}" data-tooltip="Review plan">
                                 <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 1.5l3 3L5 14H2v-3L11.5 1.5z"/></svg>
                             </button>

@@ -242,6 +242,33 @@ export class TaskViewerProvider implements vscode.WebviewViewProvider {
         this._julesStatusPollTimer = setInterval(() => {
             this._refreshJulesStatus();
         }, 30000);
+
+        // Run an automatic cleanup every hour to purge logs older than 24h
+        setInterval(async () => {
+            const root = this._resolveWorkspaceRoot();
+            if (root) {
+                try {
+                    const log = this._getSessionLog(root);
+                    await log.cleanup(24);
+                    await this._postRecentActivity(50, undefined, root);
+                } catch (err) {
+                    console.error('[TaskViewerProvider] Auto activity log cleanup failed:', err);
+                }
+            }
+        }, 60 * 60 * 1000);
+
+        // Also run it once shortly after startup
+        setTimeout(async () => {
+            const root = this._resolveWorkspaceRoot();
+            if (root) {
+                try {
+                    const log = this._getSessionLog(root);
+                    await log.cleanup(24);
+                } catch (err) {
+                    // silently fail on startup if db not ready yet
+                }
+            }
+        }, 10000);
     }
 
     private _getWorkspaceRoots(): string[] {
@@ -3202,6 +3229,15 @@ export class TaskViewerProvider implements vscode.WebviewViewProvider {
                             await this._closeChatAgent(data.agentName);
                         }
                         break;
+                    case 'clearActivityLog': {
+                        const root = this._resolveWorkspaceRoot();
+                        if (root) {
+                            const log = this._getSessionLog(root);
+                            await log.cleanup(0);
+                            await this._postRecentActivity(50, undefined, root);
+                        }
+                        break;
+                    }
                     case 'setChatAgentRole':
                         if (data.agentName && data.role) {
                             await this._setChatAgentRole(data.agentName, data.role);

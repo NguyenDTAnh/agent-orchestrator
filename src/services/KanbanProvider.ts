@@ -1807,6 +1807,35 @@ export class KanbanProvider implements vscode.Disposable {
                 }
                 break;
             }
+            case 'deleteCard': {
+                const { sessionId } = msg;
+
+                const confirm = await vscode.window.showWarningMessage(
+                    'Are you sure you want to permanently delete this plan?',
+                    { modal: true },
+                    'Delete'
+                );
+                if (confirm !== 'Delete') {
+                    break;
+                }
+
+                const workspaceRoot = this._resolveWorkspaceRoot(msg.workspaceRoot);
+                if (typeof sessionId === 'string' && sessionId.trim() && workspaceRoot) {
+                    const db = this._getKanbanDb(workspaceRoot);
+                    if (await db.ensureReady()) {
+                        await db.deletePlan(sessionId);
+                        // Also try to clean up the runsheet if it exists
+                        try {
+                            const log = this._getSessionLog(workspaceRoot);
+                            await log.deleteRunSheet(sessionId);
+                        } catch (err) {
+                            console.warn(`[KanbanProvider] Non-critical: failed to delete runsheet for ${sessionId}:`, err);
+                        }
+                    }
+                    this._scheduleBoardRefresh(workspaceRoot);
+                }
+                break;
+            }
             case 'toggleCliTriggers':
                 this._cliTriggersEnabled = !!msg.enabled;
                 await this._context.workspaceState.update('kanban.cliTriggersEnabled', this._cliTriggersEnabled);

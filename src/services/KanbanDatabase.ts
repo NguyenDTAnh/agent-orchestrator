@@ -1687,7 +1687,7 @@ export class KanbanDatabase {
      */
     public async cleanupActivityLog(beforeTimestamp: string): Promise<boolean> {
         return this._persistedUpdate(
-            'DELETE FROM activity_log WHERE timestamp < ?',
+            'DELETE FROM activity_log WHERE timestamp <= ?',
             [beforeTimestamp]
         );
     }
