@@ -690,6 +690,13 @@ function attachMcpListeners(process: ChildProcess, workspaceRoot: string) {
                     }
                     break;
                 }
+                case 'clearActivityLog': {
+                    if (workspaceRoot) {
+                        const log = new SessionActionLog(workspaceRoot);
+                        await log.cleanup(0);
+                    }
+                    break;
+                }
                 case 'triggerKanbanMove': {
                     const { sessionId, target, workspaceRoot: messageWorkspaceRoot } = message;
                     if (typeof sessionId !== 'string' || !sessionId.trim() || typeof target !== 'string' || !target.trim()) {
