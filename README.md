@@ -1,4 +1,4 @@
-# Switchboard
+# Credit to the OG: Switchboard https://github.com/TentacleOpera/switchboard
 
 **Drag and drop AI orchestration for VS Code — run your entire agent team without typing a single prompt**
 
